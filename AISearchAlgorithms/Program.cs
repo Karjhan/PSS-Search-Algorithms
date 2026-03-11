@@ -1,4 +1,5 @@
 ﻿using SearchAlgorithmsCore.Algorithms;
+using SearchAlgorithmsCore.Helpers;
 using SearchAlgorithmsCore.Interfaces;
 using SearchAlgorithmsCore.Models;
 
@@ -24,22 +25,9 @@ static void RunUninformedFloodFill()
     Console.WriteLine("\nChoose Algorithm:");
     Console.WriteLine("1 - BFS");
     Console.WriteLine("2 - DFS");
+    Console.WriteLine("3 - Compare BFS vs DFS");
     Console.Write("Selection: ");
     var algoChoice = Console.ReadLine();
-
-    ISearchAlgorithm algorithm = algoChoice switch
-    {
-        "1" => new BfsFloodFill(),
-        "2" => new DfsFloodFill(),
-        _ => null
-    };
-
-    if (algorithm == null)
-    {
-        Console.WriteLine("Invalid algorithm.");
-        return;
-    }
-
     int[,] initialGrid =
     {
         {1,1,1,2,2,3,3,3,4,4},
@@ -53,28 +41,65 @@ static void RunUninformedFloodFill()
         {7,7,6,0,0,0,5,0,2,4},
         {7,7,6,6,6,0,5,5,2,4}
     };
-
+    
     var grid = new Grid(initialGrid);
-
     Console.WriteLine("\nInitial Grid:");
     grid.Print();
-
     Console.Write("Enter start row: ");
     int row = int.Parse(Console.ReadLine());
-
     Console.Write("Enter start column: ");
     int col = int.Parse(Console.ReadLine());
-
     Console.Write("Enter new color: ");
     int newColor = int.Parse(Console.ReadLine());
 
-    var visitMap = algorithm.Execute(grid, row, col, newColor);
+    switch (algoChoice)
+    {
+        case "1":
+            ISearchAlgorithm bfs = new BfsFloodFill();
+            var bfsResult = bfs.Execute(grid, row, col, newColor);
+            Console.WriteLine($"\nFinal Grid using {bfs.Name}:");
+            grid.Print();
+            Console.WriteLine("Visit Order Map:");
+            Grid.PrintVisitMap(bfsResult.VisitMap);
+            break;
+        case "2":
+            ISearchAlgorithm dfs = new DfsFloodFill();
+            var dfsResult = dfs.Execute(grid, row, col, newColor);
+            Console.WriteLine($"\nFinal Grid using {dfs.Name}:");
+            grid.Print();
+            Console.WriteLine("Visit Order Map:");
+            Grid.PrintVisitMap(dfsResult.VisitMap);
+            break;
+        case "3":
+            RunUninformedComparison(grid, row, col, newColor);
+            break;
+        default:
+            Console.WriteLine("Invalid selection.");
+            break;
+    }
+}
+static void RunUninformedComparison(Grid grid, int row, int col, int newColor)
+{
+    ISearchAlgorithm bfs = new BfsFloodFill();
+    ISearchAlgorithm dfs = new DfsFloodFill();
 
-    Console.WriteLine($"\nFinal Grid using {algorithm.Name}:");
-    grid.Print();
+    var bfsGrid = new Grid((int[,])grid.Cells.Clone());
+    var dfsGrid = new Grid((int[,])grid.Cells.Clone());
 
-    Console.WriteLine("Visit Order Map:");
-    Grid.PrintVisitMap(visitMap);
+    var bfsResult = bfs.Execute(bfsGrid, row, col, newColor);
+    var dfsResult = dfs.Execute(dfsGrid, row, col, newColor);
+
+    Console.WriteLine("\nAlgorithm: BFS");
+    DisplayHelpers.PrintStats(bfsResult);
+
+    Console.WriteLine("\nAlgorithm: DFS");
+    DisplayHelpers.PrintStats(dfsResult);
+
+    Console.WriteLine("\nBFS Visit Map:");
+    Grid.PrintVisitMap(bfsResult.VisitMap);
+
+    Console.WriteLine("\nDFS Visit Map:");
+    Grid.PrintVisitMap(dfsResult.VisitMap);
 }
 
 Main();
