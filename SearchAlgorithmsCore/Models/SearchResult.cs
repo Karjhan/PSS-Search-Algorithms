@@ -6,5 +6,5 @@ public class SearchResult
     public int NodesVisited { get; set; }
     public int MaxFrontierSize { get; set; }
     public int Steps { get; set; }
-    public long ExecutionTimeMs { get; set; }
+    public double ExecutionTimeMs { get; set; }
 }

@@ -16,6 +16,13 @@ The implemented algorithms are:
 - BFS (Breath FIrst Search
 - A small comparative approach (taking into account time, visited nodes, steps, and frontier size)
 
+### Interesting Starting Positions
+
+- (0,0) → top-left corner of color 1 → open area, BFS will expand in rings, DFS will snake through.
+- (4,0) → color 5 → narrow corridor around obstacles → tests DFS deep path vs BFS spread.
+- (8,8) → color 11 → isolated island in center → small frontier difference.
+- (12,0) → mixed colors 13 & 14 → tests algorithm choosing which direction to explore first.
+
 ### Installation
 1. Make sure you have .NET 10 Runtime and SDK installed 
 2. Clone the project locally

@@ -55,7 +55,7 @@ public class DfsFloodFill : ISearchAlgorithm
             NodesVisited = visited,
             MaxFrontierSize = maxFrontier,
             Steps = step - 1,
-            ExecutionTimeMs = stopwatch.ElapsedMilliseconds
+            ExecutionTimeMs = stopwatch.Elapsed.TotalMilliseconds 
         };
     }
 }
