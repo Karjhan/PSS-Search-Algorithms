@@ -3,7 +3,7 @@ namespace SearchAlgorithmsCore.Models;
 public class Grid
 {
     private readonly int[,] _cells;
-
+    public int[,] Cells => _cells;
     public int Rows => _cells.GetLength(0);
     public int Columns => _cells.GetLength(1);
 

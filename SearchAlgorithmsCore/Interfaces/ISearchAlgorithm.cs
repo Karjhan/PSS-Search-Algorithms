@@ -5,5 +5,5 @@ namespace SearchAlgorithmsCore.Interfaces;
 public interface ISearchAlgorithm
 {
     string Name { get; }
-    int[,] Execute(Grid grid, int startRow, int startCol, int newColor);
+    SearchResult Execute(Grid grid, int startRow, int startCol, int newColor);
 }
