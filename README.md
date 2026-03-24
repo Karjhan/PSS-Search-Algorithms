@@ -35,3 +35,69 @@ The implemented algorithms are:
 ![SS-1](./Screenshots/UI-Search-SS1.png)
 #### Comparison result
 ![SS-2](./Screenshots/UI-Search-SS2.png)
+
+## Informed search - Terrain Navigation
+
+This is an application that uses informed search algorithms, also described in "Artificial Intelligence: A Modern Approach", to solve a `terrain-based` pathfinding problem.
+Unlike uninformed search, these algorithms use a `heuristic function` to guide the search toward the goal more efficiently.
+
+### Problem
+
+Given a grid representing terrain, where each cell contains a movement cost, the goal is to find a path from a start position to a goal position such that the total traversal cost is minimized.
+
+- Each cell value represents the cost of entering that cell
+- Cells with high values can act as obstacles (in this case >= 9 means an obstacle and will not be taken into consideration)
+- Movement is allowed in four directions (up, down, left, right)
+
+This problem models robot navigation, where a robot must find the most efficient path through uneven terrain.
+
+![SS-5](./Screenshots/I-Search-SS5.jpg)
+### Algorithms
+
+The implemented algorithms are:
+
+- A* (A-Star Search)
+
+    Uses both:
+    - g(n) → cost from start to current node
+    - h(n) → heuristic estimate to goal
+    - f(n) = g(n) + h(n)
+
+
+- Greedy Best-First Search
+
+    Uses only:
+    - h(n) → heuristic estimate
+
+
+- A small comparative approach (displays comparison results: path found, total cost, number of visited nodes)
+
+### Heuristics
+Two heuristic functions are implemented:
+
+#### Manhattan Distance 
+(n is current node and its compared to the goal node)
+```
+h(n) = |x1 - x2| + |y1 - y2|
+```
+Because of the absolute value, it will try to expand more `grid-aligned` paths (straight).
+
+#### Euclidean Distance
+(n is current node and its compared to the goal node)
+```
+h(n) = sqrt((x1 - x2)^2 + (y1 - y2)^2)
+```
+Because of the smoother difference it will try more direct paths to the goal as well.
+
+### Installation
+1. Make sure you have .NET 10 Runtime and SDK installed
+2. Clone the project locally
+3. Run `dotnet restore` to install packages
+3. Run `dotnet build` to build binaries
+4. Run `dotnet run --project SearchAlgorithms.ConsoleApp` to run the app.
+
+### Visuals
+#### Input Menu
+![SS-3](./Screenshots/I-Search-SS3.png)
+#### Comparison result
+![SS-4](./Screenshots/I-Search-SS4.png)
