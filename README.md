@@ -115,7 +115,7 @@ It has been proven that puzzles with 16 or fewer clues do not have a unique solu
 
 The challenge lies in efficiently finding a valid configuration among a very large search space.
 
-![SS-6](./Screenshots/LS-Search-SS0.png)
+![SS-6](./Screenshots/LS-Search-SS0.jpg)
 
 This problem is well-suited for local search algorithms, where we iteratively improve a candidate solution rather than constructing one step-by-step.
 
