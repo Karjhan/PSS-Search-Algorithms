@@ -1,0 +1,1 @@
+export type AlgorithmType = "manual" | "random" | "annealing";

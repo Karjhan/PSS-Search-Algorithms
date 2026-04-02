@@ -1,0 +1,86 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: url('/bg.jpg') no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+}
+
+.app {
+  text-align: center;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(9, 46.5px);
+  gap: 3px;
+  margin: 20px auto;
+}
+
+.cell {
+  width: 45px;
+  height: 45px;
+  text-align: center;
+  font-size: 18px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  background: #4f46e5;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #4338ca;
+}
+
+select {
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.cell.fixed {
+  background: #e5e7eb;
+  font-weight: bold;
+}
+
+.stats {
+  margin-top: 10px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.annealing-panel {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #f1f5f9;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.annealing-panel input {
+  width: 100px;
+  padding: 6px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
