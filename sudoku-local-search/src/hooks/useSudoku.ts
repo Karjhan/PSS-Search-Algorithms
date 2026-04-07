@@ -25,7 +25,7 @@ function randomBoard(): Board {
     });
   }
 
-  const cellsToRemove = 40;
+  const cellsToRemove = 60;
   let removed = 0;
 
   while (removed < cellsToRemove) {

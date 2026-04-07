@@ -167,3 +167,104 @@ For now, I have included the following:
 ![SS-7](./Screenshots/LS-Search-SS1.png)
 #### Comparison result
 ![SS-8](./Screenshots/LS-Search-SS2.png)
+
+## Adversarial Search - Chess
+
+This is an application that uses adversarial search algorithms, also described in "Artificial Intelligence: A Modern Approach", to solve a `terrain-based` pathfinding problem.
+Unlike the previous search algorithms, here we are takling an optimization problem between 2 systems in a turn-based approach. At its core lies the minimax principle.
+
+### Problem
+
+The problem at hand is the classical game of chess. Used widely in gaming and competitive environments, adversarial search allows agents to make optimal decisions in the presence of an opponent.
+Chess is that type of game: turn-based game where each player tries to beat the other with the same rules, with either one winning, or reaching a drawing state.
+
+The challenge lies in how to model the game evaluation for minimax algorithm.
+
+![SS-9](./Screenshots/ADV-Search-SS0.jpg)
+
+As a way of speedup, the algorithm will be ran in a `web worker` for each move and I've tried to split the search space into subsets to use parallel workers.
+
+### Algorithm
+
+I implemented minimax algorithm with alpha-beta pruning, treating White as the maximizer and Black as the minimizer. We'll start with score evaluation.
+
+#### Evaluation
+
+Each piece has its corresponding score in a record in `src/utils/constants.ts`. The actual score for a board state is calculated in `src/adversarial/evaluation.ts`.
+Here we have the following gated checks:
+- if it's your turn to move and you're checkmated -> instant loss (if white, score = -9999, else 9999)
+- if game is draw, score 
+- then, we add to the accumulator the piece scores for white and subtract the piece scores for black (if it's on a center square add 0.5 to that value)
+- then, take 10% of the total available moves and either add, or subtract that number from the score based on player type (optional)
+- finally, check `game.inCheck()` to see if current player is in check and add, or subtract 0.5 depending on player type to enforce the impact of a check
+
+#### Minimax with alpha-beta pruning
+
+Condition to terminate is either if `depth === 0`, or if `game.isGameOver()` then we evaluate and return that board score.<br>
+Then we parse through all available moves from current position, and sort them:
+- if we're about to capture a new pieces
+- then if we're about to promote
+- then the rest
+
+This was done, to help pruning even more and promote those branches of capture and promotion more than those with simple moves.
+
+Then we do the backtracking:
+```js
+game.move(...)
+alphaBeta(...)
+game.undo()
+```
+and finally the alpha-beta pruning.
+
+#### Web worker
+
+Our algorithm will run on a web worker. It's an object created with the simple means for web content to run scripts in background threads. I used it
+because I was permanently encountering freezes, most likely blocking the main application thread for the UI. These are the usual solutions for running long,
+intensive processes. Web workers represent their own separate process, thus spinning up a separate thread.
+
+We are giving a worker a set of moves and for each it evaluates the minimax alpha-beta pruning algorithm to obtain the best move out of those.
+#### Parallel workers
+
+While it was an evident speedup, the application was slow with one worker. Since it receives a subset of moves to evaluate the strategy is to paralelize:
+1. Create a pool of workers (beware of number of threads available)
+2. Use a queue for worker jobs
+3. Use a dictionary map to keep track of which worker has what job (for knowing the subset of moves split)
+4. Then we distribute the moves evenly<br>
+```js
+moves.forEach((move, i) => chunks[i % numWorkers].push(move));
+```
+5. Finally we combine the results and pick the best move globally
+
+#### React hook for orchestration
+
+Here we keep:
+- current game state
+- UI representation of the game
+- metrics collected
+- pool of workers
+
+And after initialization of all of those, we start the game with a player move and immediately after we trigger our adversarial move. Here we wait for all workers
+to be done, before getting the best result and applying the move. Essentially, since game will always start with the player which is White, the algorithm will always start
+as Black and go from there.
+
+### Metrics
+
+For now, I have included the following:
+- global evaluation score
+- nodes explored
+- time taken for evaluation move
+
+### Installation
+1. Make sure you have node (at least 20) and npm installed.
+2. Clone the project locally
+3. Run `chess-adversarial-search` to enter the React-Vite project directory
+3. Run `npm install` to install packages
+4. Go into `src/hooks/useChessGame.ts` and modify the number at line 22 from 6 to whatever number of open threads you're comfortable with
+5. Run `npm run dev` to run the app.
+6. Navigate to `http://localhost:5173/` and test it.
+
+### Visuals
+#### Example 1
+![SS-10](./Screenshots/ADV-Search-SS1.png)
+#### Example 2
+![SS-12](./Screenshots/ADV-Search-SS2.png)
