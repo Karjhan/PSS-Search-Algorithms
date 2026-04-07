@@ -180,7 +180,7 @@ Chess is that type of game: turn-based game where each player tries to beat the 
 
 The challenge lies in how to model the game evaluation for minimax algorithm.
 
-![SS-9](./Screenshots/ADV-Search-SS0.jpg)
+![SS-9](./Screenshots/ADV-Search-SS0.png)
 
 As a way of speedup, the algorithm will be ran in a `web worker` for each move and I've tried to split the search space into subsets to use parallel workers.
 
